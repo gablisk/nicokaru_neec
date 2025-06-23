@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ニコカル - 日本工学院八王子専門学校軽音楽部</title>
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>tailwind.config={theme:{extend:{colors:{primary:'#000000',secondary:'#444444'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.min.css">
+<style>
+:where([class^="ri-"])::before { content: "\f3c2"; }
+body {
+font-family: 'Noto Sans JP', sans-serif;
+overflow-x: hidden;
+}
+.sound-wave {
+position: absolute;
+width: 100%;
+height: 100px;
+bottom: 0;
+left: 0;
+}
+.sound-wave path {
+animation: wave 5s linear infinite;
+}
+@keyframes wave {
+0% { d: path('M0,50 C150,20 350,80 500,50 C650,20 850,80 1000,50 L1000,100 L0,100 Z'); }
+50% { d: path('M0,50 C150,80 350,20 500,50 C650,80 850,20 1000,50 L1000,100 L0,100 Z'); }
+100% { d: path('M0,50 C150,20 350,80 500,50 C650,20 850,80 1000,50 L1000,100 L0,100 Z'); }
+}
+.cursor-effect {
+position: fixed;
+width: 20px;
+height: 20px;
+border-radius: 50%;
+background-color: rgba(255, 255, 255, 0.5);
+pointer-events: none;
+transform: translate(-50%, -50%);
+z-index: 9999;
+mix-blend-mode: difference;
+}
+.glitch {
+position: relative;
+overflow: hidden;
+}
+.glitch::before, .glitch::after {
+content: attr(data-text);
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background: #000;
+}
+.glitch::before {
+left: 2px;
+text-shadow: -1px 0 red;
+animation: glitch-anim-1 2s infinite linear alternate-reverse;
+}
+.glitch::after {
+left: -2px;
+text-shadow: 1px 0 blue;
+animation: glitch-anim-2 3s infinite linear alternate-reverse;
+}
+@keyframes glitch-anim-1 {
+0% { clip-path: inset(80% 0 0 0); }
+20% { clip-path: inset(20% 0 80% 0); }
+40% { clip-path: inset(40% 0 40% 0); }
+60% { clip-path: inset(60% 0 20% 0); }
+80% { clip-path: inset(10% 0 70% 0); }
+100% { clip-path: inset(30% 0 50% 0); }
+}
+@keyframes glitch-anim-2 {
+0% { clip-path: inset(10% 0 60% 0); }
+20% { clip-path: inset(30% 0 0% 0); }
+40% { clip-path: inset(50% 0 30% 0); }
+60% { clip-path: inset(70% 0 10% 0); }
+80% { clip-path: inset(90% 0 50% 0); }
+100% { clip-path: inset(0% 0 80% 0); }
+}
+.menu-icon {
+width: 30px;
+height: 20px;
+position: relative;
+cursor: pointer;
+}
+.menu-icon span {
+display: block;
+position: absolute;
+height: 2px;
+width: 100%;
+background: #fff;
+opacity: 1;
+left: 0;
+transform: rotate(0deg);
+transition: .25s ease-in-out;
+}
+.menu-icon span:nth-child(1) { top: 0px; }
+.menu-icon span:nth-child(2) { top: 9px; }
+.menu-icon span:nth-child(3) { top: 18px; }
+.menu-open .menu-icon span:nth-child(1) {
+top: 9px;
+transform: rotate(135deg);
+}
+.menu-open .menu-icon span:nth-child(2) {
+opacity: 0;
+left: -60px;
+}
+.menu-open .menu-icon span:nth-child(3) {
+top: 9px;
+transform: rotate(-135deg);
+}
+.grid-item {
+position: relative;
+overflow: hidden;
+}
+.grid-item img {
+filter: grayscale(100%);
+transition: filter 0.5s ease;
+}
+.grid-item:hover img {
+filter: grayscale(0%);
+}
+.nav-menu {
+transition: transform 0.5s cubic-bezier(0.77,0.2,0.05,1.0);
+}
+.header {
+transition: background-color 0.3s ease;
+}
+.parallax {
+background-attachment: fixed;
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+}
+.ripple {
+position: absolute;
+border-radius: 50%;
+background: rgba(255, 255, 255, 0.4);
+transform: scale(0);
+animation: ripple 0.6s linear;
+}
+@keyframes ripple {
+to {
+transform: scale(4);
+opacity: 0;
+}
+}
+</style>
+</head>
+<body class="bg-white text-black">
+<div class="cursor-effect hidden md:block"></div>
+<!-- ヘッダーセクション -->
+<header class="header fixed w-full top-0 z-50 transition-all duration-300 bg-transparent">
+<div class="container mx-auto px-4 py-4 flex justify-between items-center">
+<a href="#" class="text-white font-['Pacifico'] text-3xl">logo</a>
+<div class="menu-icon z-50 w-6 h-6 flex items-center justify-center cursor-pointer">
+<span></span>
+<span></span>
+<span></span>
+</div>
+</div>
+</header>
+<!-- ナビゲーションメニュー -->
+<div class="nav-menu fixed inset-0 bg-black bg-opacity-95 z-40 transform translate-x-full flex items-center justify-center">
+<nav class="text-center">
+<ul class="space-y-8">
+<li><a href="#" class="text-white text-2xl hover:text-gray-300 flex items-center justify-center transition-all duration-300"><i class="ri-home-line ri-xl mr-2"></i>ホーム</a></li>
+<li><a href="#about" class="text-white text-2xl hover:text-gray-300 flex items-center justify-center transition-all duration-300"><i class="ri-information-line ri-xl mr-2"></i>ニコカルについて</a></li>
+<li></li>
+<li><a href="#live" class="text-white text-2xl hover:text-gray-300 flex items-center justify-center transition-all duration-300"><i class="ri-music-line ri-xl mr-2"></i>ライブ情報</a></li>
+<li><a href="#contact" class="text-white text-2xl hover:text-gray-300 flex items-center justify-center transition-all duration-300"><i class="ri-mail-line ri-xl mr-2"></i>お問い合わせ</a></li>
+</ul>
+</nav>
+</div>
+<!-- メインビジュアル -->
+<section class="relative h-screen overflow-hidden">
+<div class="absolute inset-0 z-0">
+<img src="https://readdy.ai/api/search-image?query=black%20and%20white%20concert%20photography%2C%20band%20performing%20on%20stage%2C%20dramatic%20lighting%2C%20high%20contrast%2C%20moody%20atmosphere%2C%20energetic%20performance%2C%20wide%20angle%20shot%2C%20detailed%20stage%20setup%2C%20audience%20silhouettes%2C%20professional%20music%20photography&width=375&height=762&seq=1&orientation=portrait" alt="ライブパフォーマンス" class="w-full h-full object-cover object-top filter grayscale">
+<div class="absolute inset-0 bg-black bg-opacity-50"></div>
+</div>
+<div class="relative z-10 h-full flex flex-col items-center justify-center text-white px-4">
+<h1 class="glitch text-6xl font-bold mb-4 tracking-wider" data-text="NIKOKARU">NIKOKARU</h1>
+<p class="text-xl mb-8 text-center">日本工学院八王子専門学校 軽音楽部</p>
+<a href="#about" class="bg-white text-black px-8 py-3 !rounded-button hover:bg-gray-200 transition-all duration-300 cursor-pointer">詳しく見る</a>
+</div>
+<div class="absolute bottom-0 left-0 w-full overflow-hidden">
+<svg class="sound-wave" viewBox="0 0 1000 100" preserveAspectRatio="none">
+<path d="M0,50 C150,20 350,80 500,50 C650,20 850,80 1000,50 L1000,100 L0,100 Z" fill="#ffffff"></path>
+</svg>
+</div>
+</section>
+<!-- アバウトセクション -->
+<section id="about" class="py-20 px-4 bg-white">
+<div class="container mx-auto">
+<h2 class="text-4xl font-bold mb-12 text-center">ニコカルについて</h2>
+<div class="flex flex-col md:flex-row items-center gap-8">
+<div class="w-full md:w-1/2">
+<img src="https://readdy.ai/api/search-image?query=music%20studio%20with%20instruments%2C%20black%20and%20white%20photography%2C%20band%20rehearsal%20space%2C%20guitars%2C%20drums%2C%20keyboard%2C%20microphones%2C%20amplifiers%2C%20music%20sheets%2C%20cozy%20atmosphere%2C%20detailed%20equipment%2C%20wide%20angle%20view&width=375&height=375&seq=2&orientation=squarish" alt="スタジオ風景" class="w-full h-auto rounded-lg shadow-lg filter grayscale hover:grayscale-0 transition-all duration-500">
+</div>
+<div class="w-full md:w-1/2">
+<p class="text-lg mb-4">ニコカルは日本工学院八王子専門学校の軽サークル棟208,207室私たちはサークル棟208,207室創造性を育み、技術を磨き、仲間との絆を深めています。</p>
+<p class="text-lg mb-4">定期的なライブ活動やイベント参加を通じて、学内外でサークル棟208,207室を広げることを目指しています。初心者から経験者まで、サークル棟208,207室仲間が集まっています。</p>
+<p class="text-lg mb-8">様々なジャンルのサークル棟208,207室、それぞれのメンバーの個性を活かした演奏を追求しています。</p>
+<div class="flex flex-wrap gap-4">
+<div class="bg-black text-white px-4 py-2 !rounded-button">ロック</div>
+<div class="bg-black text-white px-4 py-2 !rounded-button">ポップス</div>
+<div class="bg-black text-white px-4 py-2 !rounded-button">ジャズ</div>
+<div class="bg-black text-white px-4 py-2 !rounded-button">フュージョン</div>
+<div class="bg-black text-white px-4 py-2 !rounded-button">アニソン</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ライブ情報セクション -->
+<section id="live" class="py-20 px-4 bg-white">
+<div class="container mx-auto">
+<h2 class="text-4xl font-bold mb-12 text-center">ライブ情報</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-gray-50 p-6 !rounded-button shadow-md hover:shadow-lg transition-all duration-300">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-2xl font-bold">夏の学園祭ライブ</h3>
+<p class="text-gray-600">2025年7月15日 14:00〜</p>
+</div>
+<div class="bg-black text-white px-3 py-1 !rounded-button text-sm">次回公演</div>
+</div>
+<p class="mb-4">日本工学院八王子専門学校 メインステージにて開催される夏の学園祭でのライブパフォーマンス。オリジナル曲と人気カバー曲を演奏予定です。</p>
+<a href="#" class="inline-block bg-black text-white px-6 py-2 !rounded-button hover:bg-gray-800 transition-all duration-300 cursor-pointer">詳細を見る</a>
+</div>
+<div class="bg-gray-50 p-6 !rounded-button shadow-md hover:shadow-lg transition-all duration-300">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-2xl font-bold">地域サークル棟208,207室ィバル</h3>
+<p class="text-gray-600">2025年8月10日 16:30〜</p>
+</div>
+<div class="bg-gray-200 text-gray-700 px-3 py-1 !rounded-button text-sm">予定</div>
+</div>
+<p class="mb-4">八王子市内で開催される地域サークル棟208,207室ィバルに参加。地元のミュージシャンとの交流や共演も予定しています。</p>
+<a href="#" class="inline-block bg-black text-white px-6 py-2 !rounded-button hover:bg-gray-800 transition-all duration-300 cursor-pointer">詳細を見る</a>
+</div>
+<div class="bg-gray-50 p-6 !rounded-button shadow-md hover:shadow-lg transition-all duration-300">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-2xl font-bold">秋の定期ライブ</h3>
+<p class="text-gray-600">2025年10月5日 18:00〜</p>
+</div>
+<div class="bg-gray-200 text-gray-700 px-3 py-1 !rounded-button text-sm">予定</div>
+</div>
+<p class="mb-4">学内ホールでの定期ライブ。新曲のお披露目や、各バンド編成によるパフォーマンスを予定しています。</p>
+<a href="#" class="inline-block bg-black text-white px-6 py-2 !rounded-button hover:bg-gray-800 transition-all duration-300 cursor-pointer">詳細を見る</a>
+</div>
+<div class="bg-gray-50 p-6 !rounded-button shadow-md hover:shadow-lg transition-all duration-300">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h3 class="text-2xl font-bold">冬のアコースティックライブ</h3>
+<p class="text-gray-600">2025年12月20日 19:00〜</p>
+</div>
+<div class="bg-gray-200 text-gray-700 px-3 py-1 !rounded-button text-sm">予定</div>
+</div>
+<p class="mb-4">アコースティック編成によるしっとりとした冬のライブ。キャンドルの灯りの中で行われる特別な公演です。</p>
+<a href="#" class="inline-block bg-black text-white px-6 py-2 !rounded-button hover:bg-gray-800 transition-all duration-300 cursor-pointer">詳細を見る</a>
+</div>
+</div>
+</div>
+</section>
+<!-- ギャラリーセクション -->
+<section class="py-20 px-4 bg-gray-50">
+<div class="container mx-auto">
+<h2 class="text-4xl font-bold mb-12 text-center">ギャラリー</h2>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<div class="grid-item col-span-2 row-span-2">
+<img src="https://readdy.ai/api/search-image?query=band%20performing%20on%20stage%2C%20black%20and%20white%20photography%2C%20energetic%20performance%2C%20wide%20shot%2C%20dramatic%20lighting%2C%20audience%20visible%2C%20professional%20concert%20photography%2C%20detailed%20stage%20setup&width=375&height=375&seq=9&orientation=squarish" alt="ライブパフォーマンス" class="w-full h-full object-cover">
+</div>
+<div class="grid-item">
+<img src="https://readdy.ai/api/search-image?query=close%20up%20of%20electric%20guitar%20player%20hands%2C%20black%20and%20white%20photography%2C%20detailed%20finger%20positions%20on%20fretboard%2C%20stage%20lighting%2C%20professional%20music%20photography&width=375&height=375&seq=10&orientation=squarish" alt="ギタープレイ" class="w-full h-full object-cover">
+</div>
+<div class="grid-item">
+<img src="https://readdy.ai/api/search-image?query=vocalist%20singing%20with%20emotion%2C%20black%20and%20white%20photography%2C%20close%20up%20portrait%2C%20microphone%20visible%2C%20stage%20lighting%2C%20professional%20music%20photography&width=375&height=375&seq=11&orientation=squarish" alt="ボーカル" class="w-full h-full object-cover">
+</div>
+<div class="grid-item">
+<img src="https://readdy.ai/api/search-image?query=drummer%20in%20action%2C%20black%20and%20white%20photography%2C%20dynamic%20shot%2C%20motion%20blur%20on%20drumsticks%2C%20stage%20lighting%2C%20professional%20music%20photography&width=375&height=375&seq=12&orientation=squarish" alt="ドラム" class="w-full h-full object-cover">
+</div>
+<div class="grid-item">
+<img src="https://readdy.ai/api/search-image?query=bassist%20performing%2C%20black%20and%20white%20photography%2C%20focused%20expression%2C%20stage%20lighting%2C%20professional%20music%20photography&width=375&height=375&seq=13&orientation=squarish" alt="ベース" class="w-full h-full object-cover">
+</div>
+<div class="grid-item col-span-2">
+<img src="https://readdy.ai/api/search-image?query=band%20members%20group%20photo%2C%20black%20and%20white%20photography%2C%20casual%20pose%20with%20instruments%2C%20studio%20setting%2C%20professional%20band%20photography&width=375&height=200&seq=14&orientation=landscape" alt="バンド集合写真" class="w-full h-full object-cover">
+</div>
+</div>
+</div>
+</section>
+<!-- お問い合わせセクション -->
+<section id="contact" class="py-20 px-4 bg-white">
+<div class="container mx-auto max-w-2xl">
+<h2 class="text-4xl font-bold mb-12 text-center">お問い合わせ</h2>
+<form class="space-y-6">
+<div>
+<label for="name" class="block text-sm font-medium text-gray-700 mb-1">お名前</label>
+<input type="text" id="name" name="name" class="w-full px-4 py-2 border border-gray-300 !rounded-button focus:outline-none focus:ring-2 focus:ring-black">
+</div>
+<div>
+<label for="email" class="block text-sm font-medium text-gray-700 mb-1">メールアドレス</label>
+<input type="email" id="email" name="email" class="w-full px-4 py-2 border border-gray-300 !rounded-button focus:outline-none focus:ring-2 focus:ring-black">
+</div>
+<div>
+<label for="subject" class="block text-sm font-medium text-gray-700 mb-1">件名</label>
+<input type="text" id="subject" name="subject" class="w-full px-4 py-2 border border-gray-300 !rounded-button focus:outline-none focus:ring-2 focus:ring-black">
+</div>
+<div>
+<label for="message" class="block text-sm font-medium text-gray-700 mb-1">メッセージ</label>
+<textarea id="message" name="message" rows="5" class="w-full px-4 py-2 border border-gray-300 !rounded-button focus:outline-none focus:ring-2 focus:ring-black"></textarea>
+</div>
+<div>
+<button type="submit" class="w-full bg-black text-white py-3 !rounded-button hover:bg-gray-800 transition-all duration-300 cursor-pointer">送信する</button>
+</div>
+</form>
+<div class="mt-12 text-center">
+<h3 class="text-xl font-bold mb-4">活動場所</h3>
+<p class="mb-6">日本工学院八王子専門学校 サークル棟208,207室</p>
+<div class="h-64 bg-gray-200 !rounded-button overflow-hidden">
+<img src="https://public.readdy.ai/gen_page/map_placeholder_1280x720.png" alt="地図" class="w-full h-full object-cover">
+</div>
+<p class="mt-4 text-gray-600">〒192-0983 東京都八王子市片倉町1404-1</p>
+</div>
+</div>
+</section>
+<!-- フッターセクション -->
+<footer class="bg-black text-white py-12 px-4 relative">
+<div class="absolute top-0 left-0 w-full overflow-hidden">
+<svg viewBox="0 0 1000 100" preserveAspectRatio="none" class="fill-white">
+<path d="M0,0 L1000,0 L1000,20 C850,40 650,80 500,50 C350,20 150,60 0,20 L0,0 Z"></path>
+</svg>
+</div>
+<div class="container mx-auto pt-8">
+<div class="flex flex-col md:flex-row justify-between items-center mb-8">
+<a href="#" class="text-white font-['Pacifico'] text-3xl mb-6 md:mb-0">logo</a>
+<div class="flex space-x-6">
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-white text-black rounded-full hover:bg-gray-200 transition-all duration-300 cursor-pointer">
+<i class="ri-twitter-x-line ri-lg"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-white text-black rounded-full hover:bg-gray-200 transition-all duration-300 cursor-pointer">
+<i class="ri-instagram-line ri-lg"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-white text-black rounded-full hover:bg-gray-200 transition-all duration-300 cursor-pointer">
+<i class="ri-youtube-line ri-lg"></i>
+</a>
+<a href="#" class="w-10 h-10 flex items-center justify-center bg-white text-black rounded-full hover:bg-gray-200 transition-all duration-300 cursor-pointer">
+<i class="ri-line-line ri-lg"></i>
+</a>
+</div>
+</div>
+<div class="border-t border-gray-800 pt-8 pb-4">
+<div class="flex flex-col md:flex-row justify-between items-center">
+<p class="mb-4 md:mb-0">© 2025 ニコカル - 日本工学院八王子専門学校軽音楽部</p>
+<div class="flex space-x-6">
+<a href="#" class="text-gray-400 hover:text-white transition-all duration-300">プライバシーポリシー</a>
+<a href="#" class="text-gray-400 hover:text-white transition-all duration-300">サイトマップ</a>
+</div>
+</div>
+</div>
+</div>
+</footer>
+<!-- ボトムナビゲーション（モバイル用） -->
+<nav class="fixed bottom-0 w-full bg-black text-white py-2 px-4 md:hidden z-40">
+<div class="grid grid-cols-5 gap-1">
+<a href="#" class="flex flex-col items-center justify-center cursor-pointer">
+<i class="ri-home-line ri-lg"></i>
+<span class="text-xs mt-1">ホーム</span>
+</a>
+<a href="#about" class="flex flex-col items-center justify-center cursor-pointer">
+<i class="ri-information-line ri-lg"></i>
+<span class="text-xs mt-1">概要</span>
+</a>
+
+<a href="#live" class="flex flex-col items-center justify-center cursor-pointer">
+<i class="ri-music-line ri-lg"></i>
+<span class="text-xs mt-1">ライブ</span>
+</a>
+<a href="#contact" class="flex flex-col items-center justify-center cursor-pointer">
+<i class="ri-mail-line ri-lg"></i>
+<span class="text-xs mt-1">連絡</span>
+</a>
+</div>
+</nav>
+<script id="cursor-effect">
+document.addEventListener('DOMContentLoaded', function() {
+const cursor = document.querySelector('.cursor-effect');
+document.addEventListener('mousemove', function(e) {
+cursor.style.left = e.clientX + 'px';
+cursor.style.top = e.clientY + 'px';
+});
+document.addEventListener('mousedown', function() {
+cursor.style.transform = 'translate(-50%, -50%) scale(0.8)';
+});
+document.addEventListener('mouseup', function() {
+cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+});
+const links = document.querySelectorAll('a, button, .cursor-pointer');
+links.forEach(link => {
+link.addEventListener('mouseenter', function() {
+cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+cursor.style.mixBlendMode = 'difference';
+});
+link.addEventListener('mouseleave', function() {
+cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+cursor.style.mixBlendMode = 'difference';
+});
+link.addEventListener('click', function(e) {
+// リップルエフェクト
+const ripple = document.createElement('span');
+ripple.classList.add('ripple');
+this.appendChild(ripple);
+const rect = this.getBoundingClientRect();
+const size = Math.max(rect.width, rect.height);
+ripple.style.width = ripple.style.height = size + 'px';
+ripple.style.left = (e.clientX - rect.left - size/2) + 'px';
+ripple.style.top = (e.clientY - rect.top - size/2) + 'px';
+setTimeout(() => {
+ripple.remove();
+}, 600);
+});
+});
+});
+</script>
+<script id="header-scroll">
+document.addEventListener('DOMContentLoaded', function() {
+const header = document.querySelector('.header');
+window.addEventListener('scroll', function() {
+if (window.scrollY > 50) {
+header.classList.add('bg-black');
+header.classList.remove('bg-transparent');
+} else {
+header.classList.remove('bg-black');
+header.classList.add('bg-transparent');
+}
+});
+});
+</script>
+<script id="menu-toggle">
+document.addEventListener('DOMContentLoaded', function() {
+const menuIcon = document.querySelector('.menu-icon');
+const navMenu = document.querySelector('.nav-menu');
+const body = document.body;
+menuIcon.addEventListener('click', function() {
+this.classList.toggle('menu-open');
+if (navMenu.classList.contains('translate-x-full')) {
+navMenu.classList.remove('translate-x-full');
+body.style.overflow = 'hidden';
+} else {
+navMenu.classList.add('translate-x-full');
+body.style.overflow = '';
+}
+});
+// メニューリンクをクリックしたらメニューを閉じる
+const menuLinks = navMenu.querySelectorAll('a');
+menuLinks.forEach(link => {
+link.addEventListener('click', function() {
+menuIcon.classList.remove('menu-open');
+navMenu.classList.add('translate-x-full');
+body.style.overflow = '';
+});
+});
+});
+</script>
+<script id="scroll-animations">
+document.addEventListener('DOMContentLoaded', function() {
+// スクロールアニメーション
+const animateOnScroll = function() {
+const elements = document.querySelectorAll('h2, .grid-item, form > div');
+elements.forEach(element => {
+const elementPosition = element.getBoundingClientRect().top;
+const windowHeight = window.innerHeight;
+if (elementPosition < windowHeight * 0.9) {
+element.style.opacity = '1';
+element.style.transform = 'translateY(0)';
+}
+});
+};
+// 初期スタイル設定
+const elementsToAnimate = document.querySelectorAll('h2, .grid-item, form > div');
+elementsToAnimate.forEach(element => {
+element.style.opacity = '0';
+element.style.transform = 'translateY(20px)';
+element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+});
+// スクロールイベント
+window.addEventListener('scroll', animateOnScroll);
+// 初回実行
+animateOnScroll();
+});
+</script>
+<script id="form-validation">
+document.addEventListener('DOMContentLoaded', function() {
+const form = document.querySelector('form');
+form.addEventListener('submit', function(e) {
+e.preventDefault();
+const name = document.getElementById('name').value;
+const email = document.getElementById('email').value;
+const subject = document.getElementById('subject').value;
+const message = document.getElementById('message').value;
+if (!name || !email || !subject || !message) {
+// カスタムアラート
+const alertDiv = document.createElement('div');
+alertDiv.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center', 'z-50', 'bg-black', 'bg-opacity-50');
+alertDiv.innerHTML = `
+<div class="bg-white p-6 !rounded-button shadow-lg max-w-sm w-full mx-4">
+<h3 class="text-xl font-bold mb-4">入力エラー</h3>
+<p class="mb-6">すべての項目を入力してください。</p>
+<button class="w-full bg-black text-white py-2 !rounded-button hover:bg-gray-800 transition-all duration-300">閉じる</button>
+</div>
+`;
+document.body.appendChild(alertDiv);
+alertDiv.querySelector('button').addEventListener('click', function() {
+alertDiv.remove();
+});
+return;
+}
+// 送信成功メッセージ
+const successDiv = document.createElement('div');
+successDiv.classList.add('fixed', 'inset-0', 'flex', 'items-center', 'justify-center', 'z-50', 'bg-black', 'bg-opacity-50');
+successDiv.innerHTML = `
+<div class="bg-white p-6 !rounded-button shadow-lg max-w-sm w-full mx-4">
+<h3 class="text-xl font-bold mb-4">送信完了</h3>
+<p class="mb-6">お問い合わせありがとうございます。内容を確認次第、ご連絡いたします。</p>
+<button class="w-full bg-black text-white py-2 !rounded-button hover:bg-gray-800 transition-all duration-300">閉じる</button>
+</div>
+`;
+document.body.appendChild(successDiv);
+successDiv.querySelector('button').addEventListener('click', function() {
+successDiv.remove();
+form.reset();
+});
+});
+});
+</script>
+<script id="smooth-scroll">
+document.addEventListener('DOMContentLoaded', function() {
+// スムーススクロール
+const scrollLinks = document.querySelectorAll('a[href^="#"]');
+scrollLinks.forEach(link => {
+link.addEventListener('click', function(e) {
+e.preventDefault();
+const targetId = this.getAttribute('href');
+if (targetId === '#') return;
+const targetElement = document.querySelector(targetId);
+if (!targetElement) return;
+const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset;
+const headerOffset = 60; // ヘッダーの高さ分調整
+const offsetPosition = targetPosition - headerOffset;
+window.scrollTo({
+top: offsetPosition,
+behavior: 'smooth'
+});
+});
+});
+});
+</script>
+</body>
+</html>
